@@ -3,7 +3,8 @@ import time
 
 # ==========在这里修改你的公开直播源地址==========
 source_list = [
-    "https://raw.githubusercontent.com/Guovin/iptv-api/gd/output/result.m3u"
+    "https://raw.githubusercontent.com/Guovin/iptv-api/gd/output/result.m3u",
+    "https://iptv-org.github.io/iptv/countries/cn.m3u"
 ]
 output_file = "live.m3u"
 # =============================================
