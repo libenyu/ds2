@@ -1,0 +1,39 @@
+name: Auto Update IPTV Source
+on:
+  schedule:
+    # UTC时区！北京时间 = UTC+8
+    # 下面 cron: '0 0,12 * * *' → UTC0点、12点，对应北京时间 8:00、20:00自动运行
+    - cron: '0 0,12 * * *'
+  workflow_dispatch: # 网页可以手动点击运行
+
+permissions:
+  contents: write
+
+jobs:
+  fetch_source:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout仓库代码
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 设置Python3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 安装依赖库
+        run: |
+          pip install requests httpx
+
+      - name: 执行抓取脚本
+        run: python ./fetch_iptv.py
+
+      - name: 提交并推送m3u文件
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "actions@github.com"
+          git add live.m3u
+          git commit -m "🤖自动更新直播源 $(date '+%Y-%m-%d %H:%M')" || true
+          git push
